@@ -1,0 +1,7 @@
+<?php
+$str = 'Hey';
+echo strlen($str1);
+
+ 
+
+?>
