@@ -1,0 +1,10 @@
+?php
+function Reverse($str){
+	return strrev($str);
+}
+
+$str = "HELLO";
+echo Reverse($str)
+?>
+
+//OLLEH
