@@ -1,0 +1,12 @@
+<?php
+$substring = "know";
+$mystring = "If you know i know";
+
+if(strpos($mystring, $substring) !== false){
+    echo "Word Found!";
+} else{
+    echo "Word Not Found!";
+}
+?>
+
+//Search string: 7
