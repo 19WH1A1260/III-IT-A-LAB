@@ -1,0 +1,7 @@
+<?php
+$str = "Hey i just met you";
+$len = str_word_count($str);
+echo $len;
+?>
+
+//count:5
