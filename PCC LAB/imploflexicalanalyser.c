@@ -1,116 +1,107 @@
 #include<stdio.h>
 #include<string.h>
-#include<stdlib.h>
-
-char *strrev(char *str)
-{
-      char *p1, *p2;
-
-      if (! str || ! *str)
-            return str;
-      for (p1 = str, p2 = str + strlen(str) - 1; p2 > p1; ++p1, --p2)
-      {
-            *p1 ^= *p2;
-            *p2 ^= *p1;
-            *p1 ^= *p2;
-      }
-      return str;
-}
-void pm();
-void plus();
-void divi();
-int i,ch,j,l,addr=100;
-char ex[10], xp[10] ,xp1[10],xp2[10],id1[5],op[5],id2[5];
-void main()
-{
-while(1)
-{
-printf("\n1.assignment\n2.arithmetic\n3.relational\n4.Exit\nEnter the choice:");
-scanf("%d",&ch);
-switch(ch)
-{
-case 1:
-printf("\nEnter the expression with assignment operator:");
-scanf("%s",xp);
-l=strlen(xp);
-xp2[0]='\0';
-i=0;
-while(xp[i]!='=')
-{
-i++;
-}
-strncat(xp2,xp,i);
-strrev(xp);
-xp1[0]='\0';
-strncat(xp1,xp,l-(i+1));
-strrev(xp1);
-printf("Three address code:\ntemp=%s\n%s=temp\n",xp1,xp2);
-break;
-case 2:
-printf("\nEnter the expression with arithmetic operator:");
-scanf("%s",ex);
-strcpy(xp,ex);
-l=strlen(xp);
-xp1[0]='\0';
-for(i=0;i<l;i++)
-{
-if(xp[i]=='+'||xp[i]=='-')
-{
-if(xp[i+2]=='/'||xp[i+2]=='*')
-{
-pm();
-break;
-}
-else
-{
-plus();
-break;
-}
-}
-else if(xp[i]=='/'||xp[i]=='*')
-{
-divi();
-break;
-}
-}
-break;
-case 3:
-printf("Enter the expression with relational operator");
-scanf("%s%s%s",&id1,&op,&id2);
-if(((strcmp(op,"<")==0)||(strcmp(op,">")==0)||(strcmp(op,"<=")==0)||(strcmp(op,">=")==0)||(strcmp(op,"==")==0)||(strcmp(op,"!=")==0))==0)
-printf("Expression is error");
-else
-{
-printf("\n%d\tif %s%s%s goto %d",addr,id1,op,id2,addr+3);
-addr++;
-printf("\n%d\t T:=0",addr);
-addr++;
-printf("\n%d\t goto %d",addr,addr+2);
-addr++;
-printf("\n%d\t T:=1",addr);
-}
-break;
-case 4:
+void keyw(char *p);
+int isdigit(int p);
+int i = 0,id = 0,kw = 0,num = 0,op = 0;
+char keys[32][10]={"main","auto","printf","break","case","char","const","continue","default",
+"do","double","else","enum","extern","float","for","goto",
+"if","int","long","register","return","short","signed",
+"sizeof","static","struct","switch","typedef","union", "unsigned","void","volatile","while"};
+void main(){
+char ch,str[25],seps[15]=" \t\n,;(){}[]#\"<>",oper[]="!%^&*-+=~|.<>/?";
+int j;
+char fname[50];
+FILE *f1;
+printf("enter file path:\n");
+scanf("%s",fname);
+f1 = fopen(fname,"r");
+if(f1==NULL){
+printf("file not found");
 exit(0);
 }
+while((ch=fgetc(f1))!=EOF){
+for(j=0;j<=14;j++){
+if(ch==oper[j]){
+printf("%c is an operator\n",ch);
+op++;
+str[i]='\0';
+keyw(str);
 }
 }
-void pm()
+for(j=0;j<=14;j++){
+if(i==-1)
+break;
+if(ch==seps[j]){
+if(ch=='#'){
+while(ch!='>'){
+printf("%c",ch);
+ch=fgetc(f1);
+}
+printf("%c is a header file\n",ch);
+i=-1;
+break;
+}
+if(ch=='"'){
+do{
+ch=fgetc(f1);
+printf("%c",ch);
+}while(ch!='"');
+printf("\b is an argument\n");
+i=-1;
+break;
+}
+str[i]='\0';
+keyw(str);
+}
+}
+if(i!=-1){
+str[i]=ch;
+i++;
+}else
+i=0;
+}
+//printf("Keywords: %d\nIdentifiers: %d\nOperators: %d\nNumbers:
+%d\n",kw,id,op,num);
+}
+void keyw(char *p){
+int k,flag=0;
+for(k=0;k<=31;k++){
+if(strcmp(keys[k],p)==0){
+printf("%s is a keyword\n",p);
+kw++;
+flag=1;
+break;
+}
+}
+if(flag==0){
+if(isdigit(p[0])){
+printf("%s is a number\n",p);
+num++;
+}else{
+if(p[0]!='\0'){
+printf("%s is an identifier\n",p);
+id++;
+}
+}
+}
+i=-1;
+}
+int isdigit(int p){
+int digit[10] = {0,1,2,3,4,5,6,7,8,9};
+for(int k = 0;k < 11 ; k++){
+if(p == digit[k])
+return 1;
+else
+return 0;
+}
+}
+
+//Demo.c
+#include<stdio.h>
+int main()
 {
-strrev(xp);
-j=l-i-1;
-strncat(xp1,xp,j);
-strrev(xp1);
-         
-printf("Three address code:\ntemp=%s\ntemp1=%c%ctemp\n",xp1,xp[j+1],xp[j]);
-}
-void divi()
-{
-strncat(xp1,xp,i+2);
-printf("Three address code:\ntemp=%s\ntemp1=temp%c%c\n",xp1,xp[i+2],xp[i+3]);
-}
-void plus()
-{
-strncat(xp1,xp,i+2);
-printf("Three address code:\ntemp=%s\ntemp1=temp%c%c\n",xp1,xp[i+2],xp[i+3]);
+      int a, b;
+      int c = a+b;
+      printf("%d", c);
+      return 0;
 }
