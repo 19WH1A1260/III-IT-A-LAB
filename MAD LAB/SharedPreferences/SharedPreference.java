@@ -39,3 +39,20 @@ myEdit.putBoolean("gender_male", radiomale.isChecked());
 myEdit.apply();
 }
 }
+public void showContent(View view) {
+String s1 = prefs.getString("name", "");
+int a = prefs.getInt("age", 0);
+boolean f = prefs.getBoolean("gender_female",false);
+boolean m = prefs.getBoolean("gender_male",false);
+name.setText(s1);
+age.setText(String.valueOf(a));
+radioGroupGender.clearCheck();
+radiofemale.setChecked(f);
+radiomale.setChecked(m);
+}
+public void clearContent(View view){
+name.setText("");
+age.setText("");
+radiofemale.setChecked(false);
+radiomale.setChecked(false);
+}}
